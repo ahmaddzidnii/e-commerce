@@ -2,4 +2,4 @@
 
 ## WELCOMEE
 
-ini adalah repository membuat website e-comerce secara kolaborasi team
+ini adalah repository membuat website e-comerce secara kolaborasi teamm
