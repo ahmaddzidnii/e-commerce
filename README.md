@@ -1,3 +1,5 @@
 # e-commerce
 
-## Repo gabut di sela sela belajar :V
+## WELCOMEE
+
+ini adalah repository membuat website e-comerce secara kolaborasi team
