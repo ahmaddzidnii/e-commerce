@@ -1,12 +1,7 @@
 import express from "express";
-import { db } from "../../lib/db.js";
-const router = express.Router();
-import productController from "../controller/product-controller.js";
+import userController from "../controller/user.controller.js";
 
-router.get("/", (req, res) => {
-  res.json("Hello World!");
-});
-router.get("/products", productController.getAllProductController);
-router.post("/products", productController.createProductController);
+const publicRouter = express.Router();
+publicRouter.post("/register", userController.register);
 
-export default router;
+export { publicRouter };
