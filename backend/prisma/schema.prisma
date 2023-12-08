@@ -18,11 +18,12 @@ model Product {
 }
 
 model User {
-  id String @id @default(cuid())
-  email  String @db.VarChar(100)
+  id String @id @unique @default(cuid())
+  email  String @unique @db.VarChar(100)
   username String @db.VarChar(100)
   password String @db.VarChar(100)
-  token String? @db.VarChar(100)
+  refresh_token String? @db.VarChar(100)
+  access_token String? @db.VarChar(100)
 
   @@map("users")
 }
