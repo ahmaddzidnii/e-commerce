@@ -1,5 +1,7 @@
 import { db } from "../../lib/db.js";
 import userService from "../service/user-service.js";
+import { google } from "googleapis";
+import jwt from "jsonwebtoken";
 
 const register = async (req, res, next) => {
   try {
@@ -57,8 +59,67 @@ const logout = async (req, res, next) => {
   }
 };
 
+const loginWithGoogle = async (req, res) => {
+  const oauth2Client = new google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, "http://localhost:2000/auth/google/callback");
+
+  const scope = ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"];
+
+  const authorizationUrl = oauth2Client.generateAuthUrl({
+    access_type: "offline",
+    scope: scope,
+    include_granted_scopes: true,
+  });
+
+  res.redirect(authorizationUrl);
+};
+
+const callbackLoginGoogle = async (req, res) => {
+  const oauth2Client = new google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, "http://localhost:2000/auth/google/callback");
+  const { code } = req.query;
+  const { tokens } = await oauth2Client.getToken(code);
+
+  oauth2Client.setCredentials(tokens);
+
+  const oAuth2 = google.oauth2({
+    auth: oauth2Client,
+    version: "v2",
+  });
+
+  const { data } = await oAuth2.userinfo.get();
+  if (!data) {
+    res.status(401).json({ message: "Unauthorized" });
+  }
+
+  let user = await db.user.findUnique({
+    where: {
+      email: data.email,
+    },
+  });
+
+  if (!user) {
+    const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+    const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+
+    const access_token = jwt.sign(data, ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
+    const refresh_token = jwt.sign(data, REFRESH_TOKEN_SECRET, { expiresIn: "1d" });
+
+    user = await db.user.create({
+      data: {
+        username: data.name,
+        email: data.email,
+        access_token: access_token,
+        refresh_token: refresh_token,
+      },
+    });
+  }
+  res.cookie("refresh_token", user.refresh_token, { httpOnly: true, maxAge: 60 * 60 * 24 * 1000 });
+  return res.json({ access_token: user.access_token });
+};
+
 export default {
   register,
   login,
   logout,
+  loginWithGoogle,
+  callbackLoginGoogle,
 };
