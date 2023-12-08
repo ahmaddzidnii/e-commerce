@@ -21,7 +21,7 @@ model User {
   id String @id @unique @default(cuid())
   email  String @unique @db.VarChar(100)
   username String @db.VarChar(100)
-  password String @db.VarChar(100)
+  password String? @db.VarChar(100)
   refresh_token String? @db.Text
   access_token String? @db.Text
 
