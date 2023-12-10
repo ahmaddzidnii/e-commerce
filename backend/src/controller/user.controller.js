@@ -100,7 +100,7 @@ const callbackLoginGoogle = async (req, res) => {
     const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
     const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
-    const access_token = jwt.sign(data, ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
+    const access_token = jwt.sign(data, ACCESS_TOKEN_SECRET, { expiresIn: "30s" });
     const refresh_token = jwt.sign(data, REFRESH_TOKEN_SECRET, { expiresIn: "1d" });
 
     user = await db.user.create({
