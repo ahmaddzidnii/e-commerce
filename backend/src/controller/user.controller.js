@@ -97,21 +97,29 @@ const callbackLoginGoogle = async (req, res) => {
   });
 
   if (!user) {
-    const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
-    const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
-
-    const access_token = jwt.sign(data, ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
-    const refresh_token = jwt.sign(data, REFRESH_TOKEN_SECRET, { expiresIn: "1d" });
-
     user = await db.user.create({
       data: {
         username: data.name,
         email: data.email,
-        access_token: access_token,
-        refresh_token: refresh_token,
+        access_token: null,
+        refresh_token: null,
       },
     });
   }
+  const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+  const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+
+  const access_token = jwt.sign({ id: user.id, username: user.username, email: user.email }, ACCESS_TOKEN_SECRET, { expiresIn: "30s" });
+  const refresh_token = jwt.sign({ id: user.id, username: user.username, email: user.email }, REFRESH_TOKEN_SECRET, { expiresIn: "1d" });
+  user = await db.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      access_token: access_token,
+      refresh_token: refresh_token,
+    },
+  });
   res.cookie("refresh_token", user.refresh_token, { httpOnly: true, maxAge: 60 * 60 * 24 * 1000 });
   return res.json({ access_token: user.access_token });
 };
