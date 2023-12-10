@@ -6,7 +6,7 @@ const refreshTokenController = async (req, res) => {
   if (!cookies?.refresh_token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-  console.log({ refresh_token: cookies.refresh_token });
+  // console.log({ refresh_token: cookies.refresh_token });
 
   const refreshToken = cookies.refresh_token;
 
@@ -20,11 +20,13 @@ const refreshTokenController = async (req, res) => {
   }
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+    console.log(decoded);
     if (err || foundUser.username !== decoded.username) {
+      console.log(err?.message);
       return res.sendStatus(403);
     }
 
-    const accsessToken = jwt.sign({ username: decoded.username }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30s" });
+    const accsessToken = jwt.sign({ id: decoded.id, username: decoded.username, email: decoded.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30s" });
     res.status(200).json({ access_token: accsessToken });
   });
 };
