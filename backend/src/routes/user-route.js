@@ -1,6 +1,8 @@
 import express from "express";
 import { db } from "../../lib/db.js";
 import { verifyJWT } from "../middleware/verify-jwt-middleware.js";
+import { uploadOptions } from "../middleware/multer-middleware.js";
+import userController from "../controller/user.controller.js";
 
 const userRouter = express.Router();
 
@@ -20,5 +22,7 @@ userRouter.get("/users/:id", verifyJWT, async (req, res) => {
 
   return res.json(user);
 });
+
+userRouter.post("/avatar", uploadOptions.single("avatar"),userController.avatar);
 
 export { userRouter };

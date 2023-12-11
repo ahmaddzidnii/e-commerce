@@ -23,17 +23,18 @@ const register = async (req) => {
   }
 
   user.password = await bcrypt.hash(user.password, 10);
+  const avatar = `https://ui-avatars.com/api/?name=${user.username}`;
 
   const data = {
     username: user.username,
     email: user.email,
-    password: user.password,
+    profile_image: avatar,
   };
 
   const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
   const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
-  const access_token = jwt.sign(data, ACCESS_TOKEN_SECRET, { expiresIn: "30s" });
+  const access_token = jwt.sign(data, ACCESS_TOKEN_SECRET, { expiresIn: "12h" });
   const refresh_token = jwt.sign(data, REFRESH_TOKEN_SECRET, { expiresIn: "1d" });
 
   const result = await db.user.create({
@@ -42,6 +43,7 @@ const register = async (req) => {
       id: true,
       username: true,
       email: true,
+      profile_image: true,
       refresh_token: true,
       access_token: true,
     },
@@ -76,9 +78,10 @@ const login = async (req) => {
     id: userExist.id,
     username: userExist.username,
     email: userExist.email,
+    profile_image: userExist.profile_image,
   };
 
-  const access_token = jwt.sign(data, ACCESS_TOKEN_SECRET, { expiresIn: "30s" });
+  const access_token = jwt.sign(data, ACCESS_TOKEN_SECRET, { expiresIn: "12h" });
   const refresh_token = jwt.sign(data, REFRESH_TOKEN_SECRET, { expiresIn: "1d" });
 
   const result = await db.user.update({

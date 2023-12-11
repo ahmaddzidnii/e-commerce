@@ -22,6 +22,7 @@ model User {
   email  String @unique @db.VarChar(100)
   username String @db.VarChar(100)
   password String? @db.VarChar(100)
+  profile_image String? @db.Text
   refresh_token String? @db.Text
   access_token String? @db.Text
 
