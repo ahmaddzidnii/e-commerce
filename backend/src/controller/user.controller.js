@@ -101,6 +101,7 @@ const callbackLoginGoogle = async (req, res) => {
       data: {
         username: data.name,
         email: data.email,
+        profile_image: data.picture,
         access_token: null,
         refresh_token: null,
       },
@@ -109,8 +110,15 @@ const callbackLoginGoogle = async (req, res) => {
   const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
   const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
-  const access_token = jwt.sign({ id: user.id, username: user.username, email: user.email }, ACCESS_TOKEN_SECRET, { expiresIn: "30s" });
-  const refresh_token = jwt.sign({ id: user.id, username: user.username, email: user.email }, REFRESH_TOKEN_SECRET, { expiresIn: "1d" });
+  const payload = {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    profile_image: user.profile_image,
+  };
+
+  const access_token = jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: "12h" });
+  const refresh_token = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: "1d" });
   user = await db.user.update({
     where: {
       id: user.id,
@@ -124,10 +132,31 @@ const callbackLoginGoogle = async (req, res) => {
   return res.json({ access_token: user.access_token });
 };
 
+const avatar = async (req, res, next) => {
+  try {
+    const filename = req.file.filename;
+    const basepath = req.protocol + "://" + req.get("host");
+    const avatarPath = basepath + "/users/avatar/" + filename;
+
+    const user = await db.user.update({
+      where: {
+        id: req.user.id,
+      },
+      data: {
+        profile_image: avatarPath,
+      },
+    });
+    return res.json(user);
+  } catch (error) {
+    console.log(error?.message);
+    next(error);
+  }
+};
 export default {
   register,
   login,
   logout,
   loginWithGoogle,
   callbackLoginGoogle,
+  avatar,
 };

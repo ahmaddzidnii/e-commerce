@@ -25,8 +25,14 @@ const refreshTokenController = async (req, res) => {
       console.log(err?.message);
       return res.sendStatus(403);
     }
+    const payload = {
+      id: decoded.id,
+      username: decoded.username,
+      email: decoded.email,
+      profile_image: decoded.profile_image,
+    };
 
-    const accsessToken = jwt.sign({ id: decoded.id, username: decoded.username, email: decoded.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30s" });
+    const accsessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30s" });
     res.status(200).json({ access_token: accsessToken });
   });
 };

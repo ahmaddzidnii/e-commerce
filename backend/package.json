@@ -2,11 +2,11 @@
   "name": "backend-e-commerce",
   "version": "1.0.0",
   "description": "",
-  "main": "src/main.js",
+  "main": "main.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/main.js",
-    "start": "node src/main.js"
+    "dev": "nodemon main.js",
+    "start": "node main.js"
   },
   "author": "",
   "license": "MIT",
@@ -24,6 +24,7 @@
     "joi": "^17.11.0",
     "joy": "^0.1.1",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
     "prisma": "^5.6.0"
   }
 }
