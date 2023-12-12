@@ -23,6 +23,6 @@ userRouter.get("/users/:id", verifyJWT, async (req, res) => {
   return res.json(user);
 });
 
-userRouter.post("/avatar", uploadOptions.single("avatar"),userController.avatar);
+userRouter.post("/avatar/:id", verifyJWT, uploadOptions.single("avatar"), userController.avatar);
 
 export { userRouter };
