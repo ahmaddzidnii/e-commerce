@@ -20,7 +20,7 @@ app.use(express.json());
 // Serve static files globally
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-console.log(__dirname);
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(publicRouter);

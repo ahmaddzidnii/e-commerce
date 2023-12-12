@@ -138,14 +138,34 @@ const avatar = async (req, res, next) => {
     const basepath = req.protocol + "://" + req.get("host");
     const avatarPath = basepath + "/users/avatar/" + filename;
 
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ message: "Id kosong!" });
+
+    const userExist = await db.user.count({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!userExist) {
+      return res.status(400).json({ message: "User tidak ditemukan!" });
+    }
+
     const user = await db.user.update({
       where: {
-        id: req.user.id,
+        id: id,
       },
       data: {
         profile_image: avatarPath,
       },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        profile_image: true,
+      },
     });
+
     return res.json(user);
   } catch (error) {
     console.log(error?.message);
