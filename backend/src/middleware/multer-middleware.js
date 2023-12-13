@@ -6,7 +6,7 @@ const FILE_TYPE_MAP = {
   "image/jpg": "jpg",
 };
 
-const storage = multer.diskStorage({
+const storageAvatar = multer.diskStorage({
   destination: (req, file, cb) => {
     const isValid = FILE_TYPE_MAP[file.mimetype];
     let uploadError = new Error("invalid image type");
@@ -22,4 +22,4 @@ const storage = multer.diskStorage({
   },
 });
 
-export const uploadOptions = multer({ storage: storage });
+export const uploadAvatarOptions = multer({ storage: storageAvatar });
