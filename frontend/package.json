@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "axios": "^1.6.2",
     "class-variance-authority": "^0.7.0",
@@ -20,6 +21,7 @@
     "nextjs-toploader": "^1.6.4",
     "react": "^18",
     "react-dom": "^18",
+    "react-responsive-carousel": "^3.2.23",
     "tailwind-merge": "^2.1.0",
     "tailwindcss-animate": "^1.0.7"
   },
