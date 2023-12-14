@@ -11,14 +11,19 @@ datasource db {
 }
 
 model Product {
-  id Int @id @default(autoincrement())
+  id Int @id  @default(autoincrement())
   name String @db.VarChar(255)
-  price Int @db.Int
+  price String @db.Text
+  description String? @db.Text
+  product_image String @db.Text
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
   @@map("product")
 }
 
 model User {
-  id String @id @unique @default(cuid())
+  id String @id @default(cuid())
   email  String @unique @db.VarChar(100)
   username String @db.VarChar(100)
   password String? @db.VarChar(100)
