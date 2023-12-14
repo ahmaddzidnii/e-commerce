@@ -6,7 +6,7 @@ export const Logo = () => {
     <Link href="/">
       <div className="flex items-center gap-x-2">
         <Image src="/logo.svg" alt="logo" width={30} height={30} />
-        <p className="text-lg text-purple-100 font-bold hidden md:block">MddShop</p>
+        <p className="text-lg text-purple-100 font-bold hidden md:block">MdShop</p>
       </div>
     </Link>
   );

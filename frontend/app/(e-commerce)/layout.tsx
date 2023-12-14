@@ -4,7 +4,7 @@ const EcommerceLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Navbar />
-      <main className="pt-24">{children}</main>
+      <main className="py-32">{children}</main>
     </>
   );
 };

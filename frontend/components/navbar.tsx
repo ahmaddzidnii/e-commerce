@@ -8,7 +8,7 @@ import { useState } from "react";
 export const Navbar = () => {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   return (
-    <nav className=" w-full h-24 py-2 flex items-center fixed shadow-md bg-violet-700 text-violet-100">
+    <nav className=" w-full z-[999] h-24 py-2 flex items-center fixed shadow-md bg-violet-700 text-violet-100">
       <div className="container">
         <div className=" flex items-center justify-between ">
           <div className="w-[20%]">
