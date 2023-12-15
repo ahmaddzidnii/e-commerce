@@ -12,6 +12,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        utama: "#ea580c",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
