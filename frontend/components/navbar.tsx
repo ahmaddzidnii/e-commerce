@@ -16,7 +16,7 @@ export const Navbar = () => {
           </div>
           <div className="w-[60%] relative">
             <Input
-              className="text-black"
+              className="text-muted-foreground !rounded-[2px] "
               placeholder="Cari barang disini..."
               onChange={(e: any) => {
                 if (e.target.value.length > 0) {

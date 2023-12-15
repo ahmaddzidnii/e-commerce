@@ -3,17 +3,19 @@ import { Separator } from "@/components/ui/separator";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { HeadingRekomendasi } from "./heading-rekomendasi";
 
 export const Rekomendasi = () => {
   return (
     <div>
       {/* className="fixed top-24 w-[95.5%] z-[999]" */}
-      <div>
+      {/* <div>
         <div className="relative w-full h-full px-4 py-4  bg-white">
           <h1 className="text-xl font-semibold text-center text-orange-700">Rekomendasi Untuk Anda</h1>
           <Separator className="absolute bottom-0 left-0 bg-orange-700 h-2" />
         </div>
-      </div>
+      </div> */}
+      <HeadingRekomendasi />
 
       <div className="grid grid-cols-12 gap-3 mt-4">
         {new Array(48).fill(null).map((_, index) => (
