@@ -1,4 +1,6 @@
 import { db } from "../../lib/db.js";
+import { ResponseError } from "../error/response-error.js";
+import productService from "../service/product-service.js";
 
 const getAllProductController = async (req, res) => {
   try {
@@ -23,7 +25,27 @@ const createProductController = async (req, res) => {
   }
 };
 
+// Recomedations
+
+const productRecomendationController = async (req, res, next) => {
+  try {
+    const data = await productService.productRecomendationService(req);
+    return res.json({
+      status: 200,
+      data: data,
+    });
+  } catch (error) {
+    if (error instanceof ResponseError) {
+      console.log("ok");
+    } else {
+      console.log(error);
+    }
+    next(error);
+  }
+};
+
 export default {
   getAllProductController,
   createProductController,
+  productRecomendationController,
 };
