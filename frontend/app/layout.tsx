@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={poppins.className}>
-        <NextTopLoader showSpinner={false} />
+        <NextTopLoader showSpinner={false} height={5} color="#fde047" />
         {children}
       </body>
     </html>
