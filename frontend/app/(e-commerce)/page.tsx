@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Banner } from "./_components/banner";
 import { Category } from "./_components/category";
 import { Rekomendasi } from "./_components/rekomendasi";
@@ -8,7 +9,9 @@ export default function Home() {
       <div className="container">
         <Banner />
         <Category />
-        <Rekomendasi />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Rekomendasi />
+        </Suspense>
       </div>
     </section>
   );

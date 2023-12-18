@@ -13,7 +13,7 @@ export const Category = () => {
         <div className="grid grid-cols-10 gap-3">
           {category.map((item) => (
             <div className="col-span-12 sm:col-span-2" key={item.id}>
-              <Link href={`/category/${item.slug}`}>
+              <Link href={`/${item.slug}`}>
                 <div role="link" className="flex flex-col gap-5 w-full h-[200px] items-center justify-center p-4 bg-orange-100 rounded-sm hover:scale-[101%] transition-all ease-in">
                   <img className="w-[90px] h-[90px] rounded-lg mb-2" src={item.image} alt="elektronik" />
                   <p className="text-center  overflow-ellipsis "> {item.name}</p>
