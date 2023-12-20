@@ -44,8 +44,28 @@ const productRecomendationController = async (req, res, next) => {
   }
 };
 
+const productsController = async (req, res, next) => {
+  try {
+    const data = await productService.productsService(req);
+    return res.json({
+      status: 200,
+      data: data.products,
+      pagination: {
+        total_page: data.pagination.total_page,
+        current_page: data.pagination.current_page,
+        count: data.pagination.count,
+        has_next_page: data.pagination.has_next_page,
+        has_prev_page: data.pagination.has_prev_page,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
 export default {
   getAllProductController,
   createProductController,
   productRecomendationController,
+  productsController,
 };
