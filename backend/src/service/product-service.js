@@ -43,4 +43,61 @@ const productRecomendationService = async (req) => {
   return randomProduct;
 };
 
-export default { createProductService, productRecomendationService };
+const productsService = async (req) => {
+  const { page, limit } = req.query;
+  const itemsPerPage = parseInt(limit) || 48; // Jumlah data per halaman
+  const currentPage = parseInt(page) || 1; // Halaman saat ini
+
+  //   Handle dimana client mengirim limit dibawah 48
+  if (itemsPerPage < 48) {
+    throw new ResponseError("Limit tidak boleh kurang dari 48", 400);
+  }
+
+  if (currentPage < 0) {
+    throw new ResponseError("Data tidak ditemukan", 404);
+  }
+
+  // Menghitung jumlah total data
+  const totalItems = await db.product.count();
+
+  // Menghitung jumlah halaman
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  // Menghitung jumlah item yang harus ditampilkan dalam halaman terakhir
+  const itemsInLastPage = totalItems % itemsPerPage;
+  const count = currentPage === totalPages ? itemsInLastPage : itemsPerPage;
+
+  // Mengecek jika page yang dikirim client lebih dari yang ada di data base
+  if (page > totalPages) {
+    throw new ResponseError("Page yang diminta melebihi page pada data pada database!", 400);
+  }
+
+  // Menghitung indeks mulai dan selesai untuk data pada halaman saat ini
+  const offset = (currentPage - 1) * itemsPerPage;
+
+  const products = await db.product.findMany({
+    take: itemsPerPage,
+    skip: offset,
+  });
+
+  // Kondisi dimana tidak memiliki halaman selanjutnya
+  const hasNextPage = totalPages === currentPage ? false : true;
+
+  // Kondisi dimana tidak memiliki halaman sebelumnya
+  const hasPrevPage = currentPage === 1 ? false : true;
+
+  const data = {
+    products,
+    pagination: {
+      current_page: currentPage,
+      total_page: totalPages,
+      count: count,
+      has_next_page: hasNextPage,
+      has_prev_page: hasPrevPage,
+    },
+  };
+
+  return data;
+};
+
+export default { createProductService, productRecomendationService, productsService };
