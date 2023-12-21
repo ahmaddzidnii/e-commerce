@@ -1,5 +1,6 @@
 import { db } from "../../lib/db.js";
 import { ResponseError } from "../error/response-error.js";
+import { categoryEnumToText } from "../utils/category.js";
 import { productValidationSchema } from "../validation/product-validation.js";
 import { validate } from "../validation/validation.js";
 
@@ -44,7 +45,11 @@ const productRecomendationService = async (req) => {
 };
 
 const productsService = async (req) => {
-  const { page, limit } = req.query;
+  const { page, limit, category } = req.query;
+
+  // category
+  const selectedCategory = categoryEnumToText(category);
+
   const itemsPerPage = parseInt(limit) || 48; // Jumlah data per halaman
   const currentPage = parseInt(page) || 1; // Halaman saat ini
 
@@ -58,7 +63,11 @@ const productsService = async (req) => {
   }
 
   // Menghitung jumlah total data
-  const totalItems = await db.product.count();
+  const totalItems = await db.product.count({
+    where: {
+      category: selectedCategory,
+    },
+  });
 
   // Menghitung jumlah halaman
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -69,7 +78,7 @@ const productsService = async (req) => {
 
   // Mengecek jika page yang dikirim client lebih dari yang ada di data base
   if (page > totalPages) {
-    throw new ResponseError("Page yang diminta melebihi page pada data pada database!", 400);
+    throw new ResponseError("Product tidak ditemukan!", 404);
   }
 
   // Menghitung indeks mulai dan selesai untuk data pada halaman saat ini
@@ -78,6 +87,9 @@ const productsService = async (req) => {
   const products = await db.product.findMany({
     take: itemsPerPage,
     skip: offset,
+    where: {
+      category: selectedCategory,
+    },
   });
 
   // Kondisi dimana tidak memiliki halaman selanjutnya
@@ -87,6 +99,9 @@ const productsService = async (req) => {
   const hasPrevPage = currentPage === 1 ? false : true;
 
   const data = {
+    filter: {
+      category: selectedCategory,
+    },
     products,
     pagination: {
       current_page: currentPage,
