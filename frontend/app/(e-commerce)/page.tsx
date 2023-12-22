@@ -6,13 +6,11 @@ import { Rekomendasi } from "./_components/rekomendasi";
 export default function Home() {
   return (
     <section>
-      <div className="container">
-        <Banner />
-        <Category />
-        <Suspense fallback={<div>Loading...</div>}>
-          <Rekomendasi />
-        </Suspense>
-      </div>
+      <Banner />
+      <Category />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Rekomendasi />
+      </Suspense>
     </section>
   );
 }

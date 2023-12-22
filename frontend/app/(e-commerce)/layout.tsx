@@ -5,7 +5,9 @@ const EcommerceLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Navbar />
-      <main className="py-32 bg-neutral-100">{children}</main>
+      <main className="py-32 bg-neutral-100">
+        <section className="container">{children}</section>
+      </main>
       <Footer />
     </>
   );

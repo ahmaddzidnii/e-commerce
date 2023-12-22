@@ -1,4 +1,4 @@
-import { CarouselComponents } from "../carousel";
+import { CarouselComponents } from "./carousel";
 
 export const Banner = () => {
   return (
