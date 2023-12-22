@@ -10,6 +10,8 @@ export const categoryEnumToText = (category) => {
       return "pakaian-pria";
     case "SHPRIA":
       return "sepatu-pria";
+    case undefined:
+      return undefined;
     default:
       return null;
   }

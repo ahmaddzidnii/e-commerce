@@ -6,7 +6,7 @@ import { HeadingRekomendasi } from "./heading-rekomendasi";
 import { axiosInstance } from "@/lib/axios";
 import TextTruncation from "@/components/text-truncate";
 
-interface RekomendasiProps {
+export interface RekomendasiProps {
   id: number;
   product_name: string;
   price: string;
