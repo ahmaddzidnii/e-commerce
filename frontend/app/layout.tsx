@@ -1,8 +1,10 @@
-import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
-import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
+import { Poppins } from "next/font/google";
+import type { Metadata } from "next";
+
+import "./globals.css";
 import { AuthContextProvider } from "@/context/auth-context";
+import { Toaster } from "@/components/ui/sonner";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"] });
 
@@ -25,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={poppins.className}>
         <AuthContextProvider>
           <NextTopLoader showSpinner={false} height={5} color="#fde047" />
+          <Toaster />
           {children}
         </AuthContextProvider>
       </body>

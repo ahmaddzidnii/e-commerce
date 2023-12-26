@@ -3,30 +3,32 @@
 import { useState } from "react";
 import { useAuthContext } from "./use-auth-context";
 import { axiosInstance } from "@/lib/axios";
+import { toast } from "sonner";
 
 export const useSignup = () => {
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { dispatch } = useAuthContext();
 
-  const signup = async (email: string, password: string) => {
-    setLoading(true);
+  const signup = async (username: string, email: string, password: string, confirmPassword: string) => {
+    setIsLoading(true);
     setError(null);
 
-    const response = await axiosInstance.post("/register", { email, password });
+    try {
+      const response = await axiosInstance.post("/register", { username, email, password, confirmPassword });
 
-    if (response.status !== 201) {
-      setLoading(false);
-      setError(response.data.message);
-      return;
-    }
-    if (response.status === 201) {
-      localStorage.setItem("user", JSON.stringify(response.data));
+      if (response.status === 201) {
+        localStorage.setItem("user", JSON.stringify(response.data));
 
-      dispatch({ type: "LOGIN", payload: response.data });
-      setLoading(false);
+        dispatch({ type: "LOGIN", payload: response.data });
+        setIsLoading(false);
+        toast.success("Register Success");
+      }
+    } catch (error: any) {
+      setError(error.response.data.errors);
+      setIsLoading(false);
     }
   };
 
-  return { error, loading, signup };
+  return { error, isLoading, signup };
 };
