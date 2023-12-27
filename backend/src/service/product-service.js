@@ -45,7 +45,12 @@ const productRecomendationService = async (req) => {
 };
 
 const productsService = async (req) => {
-  const { page, limit, category } = req.query;
+  const { page, limit, category, shortBy, order } = req.query;
+
+  // Keperluan filter res
+
+  let SHORT_BY = undefined;
+  let ORDER = undefined;
 
   // category
   const selectedCategory = categoryEnumToText(category);
@@ -84,13 +89,30 @@ const productsService = async (req) => {
   // Menghitung indeks mulai dan selesai untuk data pada halaman saat ini
   const offset = (currentPage - 1) * itemsPerPage;
 
-  const products = await db.product.findMany({
+  let products = await db.product.findMany({
     take: itemsPerPage,
     skip: offset,
+
     where: {
       category: selectedCategory,
     },
   });
+
+  if (shortBy === "price") {
+    SHORT_BY = "price";
+    products = products.sort((a, b) => {
+      const priceA = parseInt(a.price.replace(/[^0-9]/g, ""));
+      const priceB = parseInt(b.price.replace(/[^0-9]/g, ""));
+
+      if (order === "asc") {
+        ORDER = "asc";
+        return priceA - priceB;
+      } else if (order === "desc") {
+        ORDER = "desc";
+        return priceB - priceA;
+      }
+    });
+  }
 
   // Kondisi dimana tidak memiliki halaman selanjutnya
   const hasNextPage = totalPages === currentPage ? false : true;
@@ -99,8 +121,15 @@ const productsService = async (req) => {
   const hasPrevPage = currentPage === 1 ? false : true;
 
   const data = {
-    filter: {
-      category: selectedCategory,
+    metadata: {
+      category: selectedCategory ? selectedCategory : "all",
+      shortBy:
+        SHORT_BY && ORDER
+          ? {
+              filter: SHORT_BY,
+              order: ORDER,
+            }
+          : null,
     },
     products,
     pagination: {
