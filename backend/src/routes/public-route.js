@@ -2,6 +2,7 @@ import express from "express";
 import userController from "../controller/user.controller.js";
 import { refreshTokenController } from "../controller/refresh-token-controler.js";
 import productController from "../controller/product-controller.js";
+import searchProductController from "../controller/search-product-controller.js";
 
 const publicRouter = express.Router();
 publicRouter.post("/register", userController.register);
@@ -18,3 +19,5 @@ publicRouter.get("/products", productController.productsController);
 
 publicRouter.get("/recomendations", productController.productRecomendationController);
 export { publicRouter };
+
+publicRouter.get("/search-hint", searchProductController.searchHintController);
