@@ -10,9 +10,18 @@ const searchHintService = async (req) => {
 
   const search_hint = await db.product.findMany({
     where: {
-      product_name: {
-        contains: query,
-      },
+      OR: [
+        {
+          product_name: {
+            search: query,
+          },
+        },
+        {
+          product_name: {
+            contains: query,
+          },
+        },
+      ],
     },
     take: 10,
     select: {

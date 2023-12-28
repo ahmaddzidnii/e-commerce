@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
 }
 
 datasource db {
@@ -30,5 +31,6 @@ model Product {
   free_ongkir   Boolean?
   cod           Boolean?
 
+  @@fulltext([product_name], map: "idx_product_name")
   @@map("products")
 }
