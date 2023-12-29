@@ -21,3 +21,4 @@ publicRouter.get("/recomendations", productController.productRecomendationContro
 export { publicRouter };
 
 publicRouter.get("/search-hint", searchProductController.searchHintController);
+publicRouter.get("/search", searchProductController.searchProductController);

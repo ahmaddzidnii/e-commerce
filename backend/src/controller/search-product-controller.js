@@ -10,6 +10,17 @@ const searchHintController = async (req, res, next) => {
   }
 };
 
+const searchProductController = async (req, res, next) => {
+  try {
+    const data = await searchProductService.searchProductService(req);
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 export default {
   searchHintController,
+  searchProductController,
 };
