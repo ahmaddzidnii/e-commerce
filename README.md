@@ -1,6 +1,6 @@
 # e-commerce
 
-## WELCOMEE
+## WELCOMEEE
 
 ini adalah repository membuat website e-comerce secara kolaborasi team
 
