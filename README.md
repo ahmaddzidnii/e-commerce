@@ -1,6 +1,6 @@
 # e-commerce
 
-## WELCOMEE
+## WELCOME
 
 ini adalah repository membuat website e-comerce secara kolaborasi team
 
